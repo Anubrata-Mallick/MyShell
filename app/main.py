@@ -1,5 +1,5 @@
 import sys
-COMMANDS = ["echo", "exit"]
+COMMANDS = ["echo", "exit", "type"]
 
 def main():
         
