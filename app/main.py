@@ -1,19 +1,27 @@
 import sys
+import config
 
 def main():
-    # Create a REPL (Read-Execute-Print-Loop)
-    while True :
-        # Uncomment this block to pass the first stage
-        sys.stdout.write("$ ")
-        # Wait for user input ------ READ 
-        command = input()
-        #--------------------------- EXECUTE
-        if command == "exit 0":
-            break
-        elif command.split(maxsplit=1)[0] == "echo" :
-            print(command.split(maxsplit=1)[1])
-        else:
+        
+    sys.stdout.write("$ ")
+    sys.stdout.flush()
+
+    command = input()
+    match command :
+        case command if command.startswith("type "):
+            keyword = command.split(maxsplit=1)[1]
+            if keyword in config.COMMANDS:
+                sys.stdout.write(f"{keyword} is a shell builtin \n")
+            else:
+                sys.stdout.write(f"{keyword}: not found \n")
+        case command if command.startswith("echo "):
+            sys.stdout.write(f"{command[ len("echo "): ]}\n")
+        case "exit 0":
+            exit(0)
+        case _:
             print(f"{command}: command not found")
+
+    main()
 
 if __name__ == "__main__":
     main()
