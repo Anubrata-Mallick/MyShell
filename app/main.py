@@ -1,5 +1,6 @@
 import sys
 import config
+COMMANDS = ["echo", "exit"]
 
 def main():
         
@@ -10,7 +11,7 @@ def main():
     match command :
         case command if command.startswith("type "):
             keyword = command.split(maxsplit=1)[1]
-            if keyword in config.COMMANDS:
+            if keyword in COMMANDS:
                 sys.stdout.write(f"{keyword} is a shell builtin \n")
             else:
                 sys.stdout.write(f"{keyword}: not found \n")
