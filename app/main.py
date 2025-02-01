@@ -1,5 +1,4 @@
 import sys
-import config
 COMMANDS = ["echo", "exit"]
 
 def main():
