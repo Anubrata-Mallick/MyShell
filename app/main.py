@@ -8,6 +8,8 @@ def main():
     # Wait for user input
     input()
 
-
+    # Print every command as invalid
+    print("invalid_command: command not found")
+    
 if __name__ == "__main__":
     main()
