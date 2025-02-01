@@ -22,7 +22,7 @@ def main():
                     cmd_path = f"{path}/{cmd}"
 
             if cmd in COMMANDS:
-                sys.stdout.write(f"{cmd} is a shell builtin \n")
+                sys.stdout.write(f"{cmd} is a shell builtin \n") 
             elif cmd_path:
                 sys.stdout.write(f"{cmd} is {cmd_path}\n")
             else:
