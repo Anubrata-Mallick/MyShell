@@ -8,11 +8,12 @@ def main():
         # Wait for user input ------ READ 
         command = input()
         #--------------------------- EXECUTE
-        match command :
-            case "exit 0":
-                break
-            case _ :
-                print(f"{command}: command not found")
+        if command == "exit 0":
+            break
+        elif command.split(maxsplit=1)[0] == "echo" :
+            print(command.split(maxsplit=1)[1])
+        else:
+            print(f"{command}: command not found")
 
 if __name__ == "__main__":
     main()
