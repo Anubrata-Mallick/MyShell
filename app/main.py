@@ -44,7 +44,8 @@ def handle_type(command):
 
 def handle_echo(command):
     if command[len("echo ")] == "'":
-        sys.stdout.write(command.split("'")[1])
+        args = command[len("echo "):].replace("'", "")
+        sys.stdout.write(args)
         print()
     else:
         args = command[ len("echo "): ].strip()
