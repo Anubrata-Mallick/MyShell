@@ -1,6 +1,5 @@
 import sys
 import os
-import subprocess
 
 COMMANDS = ["echo", "exit", "type"]
 PATH = os.environ.get("PATH")
@@ -34,10 +33,11 @@ def main():
         case "exit 0":
             exit(0)
         case _:
-            if executable := locate_executable(command):
-                subprocess.run([executable, args*])
-            else:    
-                print(f"{command}: command not found")
+            for path in PATH :
+                if os.path.isfile(command.split(" ")[0]):
+                    os.system(command)
+                    main()   
+            print(f"{command}: command not found")
 
     main()
 
