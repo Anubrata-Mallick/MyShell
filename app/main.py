@@ -3,7 +3,7 @@ import os
 import subprocess
 from typing import Optional
 
-COMMANDS = ["echo", "exit", "type", "pwd"]
+COMMANDS = ["echo", "exit", "type", "pwd", "cd"]
 PATH = os.environ.get("PATH", "")
 
 def locate_executable(command) -> Optional[str]:
@@ -51,7 +51,7 @@ def main():
             if os.path.exists(command.split(maxsplit=1)[1]):
                 os.chdir(command.split(maxsplit=1)[1]) # change the directory
             else:
-                sys.stdout.write(f"{command}: No such file or directory \n")
+                sys.stdout.write(f"cd: /{command.split(maxsplit=1)[1]}: No such file or directory")
         case _:
             if executable := locate_executable(command.split(maxsplit=1)[0]):
                 subprocess.run([executable, command.split(maxsplit=1)[1]])
