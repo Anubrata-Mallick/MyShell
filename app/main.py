@@ -54,7 +54,7 @@ def handle_cat(command):
     file_paths = args.split_filepath()
 
     for file_path in file_paths:
-        try 
+        try: 
             with open(file_path, "r") as file:
                 content = file.read()
                 sys.stdout.write(f"{content}    ")
