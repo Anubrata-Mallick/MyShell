@@ -53,7 +53,7 @@ def handle_echo(command):
 
 def handle_cat(command):
     args = command.split(maxsplit=1)[1]
-    file_paths = args.shlex.file_path()
+    file_paths = shlex.split(args)
 
     for file_path in file_paths:
         try: 
