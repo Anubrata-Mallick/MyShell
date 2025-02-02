@@ -51,7 +51,7 @@ def main():
             if os.path.exists(command.split(maxsplit=1)[1]):
                 os.chdir(command.split(maxsplit=1)[1]) # change the directory
             else:
-                sys.stdout.write(f"cd: /{command.split(maxsplit=1)[1]}: No such file or directory")
+                sys.stdout.write(f"cd: {command.split(maxsplit=1)[1]}: No such file or directory\n")
         case _:
             if executable := locate_executable(command.split(maxsplit=1)[0]):
                 subprocess.run([executable, command.split(maxsplit=1)[1]])
