@@ -3,7 +3,7 @@ import os
 import subprocess
 from typing import Optional
 
-COMMANDS = ["echo", "exit", "type"]
+COMMANDS = ["echo", "exit", "type", "pwd"]
 PATH = os.environ.get("PATH", "")
 
 def locate_executable(command) -> Optional[str]:
