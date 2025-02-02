@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 
 COMMANDS = ["echo", "exit", "type"]
 PATH = os.environ.get("PATH")
@@ -33,8 +34,9 @@ def main():
         case "exit 0":
             exit(0)
         case _:
-            if os.path.isfile(command.split(" ")[0]):
-                os.system(command)
+            for path in PATH.split(":"):
+                if os.path.isfile(command.split(" ")[0]):
+                    os.system(command)
             else:
                 print(f"{command}: command not found")
 
