@@ -59,7 +59,7 @@ def handle_cat(command):
         try: 
             with open(file_path, "r") as file:
                 content = file.read()
-                sys.stdout.write(f"{content}    ")
+                sys.stdout.write(f"{content}")
         except FileNotFoundError:
             sys.stdout.write(f"{file_path} Not Found \n")
         except PermissionError:
