@@ -44,6 +44,8 @@ def main():
             sys.stdout.write(f"{command[ len("echo "): ]}\n")
         case "exit 0":
             exit(0)
+        case "pwd":
+            sys.stdout.write(f"{os.getcwd()}\n")
         case _:
             if executable := locate_executable(command.split(maxsplit=1)[0]):
                 subprocess.run([executable, command.split(maxsplit=1)[1]])
