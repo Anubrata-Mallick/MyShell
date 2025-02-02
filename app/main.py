@@ -47,8 +47,12 @@ def main():
         case "pwd":
             sys.stdout.write(f"{os.getcwd()}\n")
         case command if command.startswith("cd "):
+            # check if user want to go home
+            if command.split(maxsplit=1)[1] == "~":
+                home_directory = os.path.expanduser("~")
+                os.chdir(home_directory)
             #check if the file path exists or not
-            if os.path.exists(command.split(maxsplit=1)[1]):
+            elif os.path.exists(command.split(maxsplit=1)[1]):
                 os.chdir(command.split(maxsplit=1)[1]) # change the directory
             else:
                 sys.stdout.write(f"cd: {command.split(maxsplit=1)[1]}: No such file or directory\n")
