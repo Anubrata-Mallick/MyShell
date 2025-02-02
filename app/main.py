@@ -35,12 +35,12 @@ def handle_type(command):
         if os.path.isfile(f"{path}/{cmd}"):
             cmd_path = f"{path}/{cmd}"
 
-        if cmd in COMMANDS:
-            sys.stdout.write(f"{cmd} is a shell builtin \n") 
-        elif cmd_path:
-            sys.stdout.write(f"{cmd} is {cmd_path}\n")
-        else:
-            sys.stdout.write(f"{cmd}: not found \n")
+    if cmd in COMMANDS:
+        sys.stdout.write(f"{cmd} is a shell builtin \n") 
+    elif cmd_path:
+        sys.stdout.write(f"{cmd} is {cmd_path}\n")
+    else:
+        sys.stdout.write(f"{cmd}: not found \n")
 
 def handle_echo(command):
     if command[len("echo ")] == "'":
