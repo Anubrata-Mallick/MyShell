@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 from typing import Optional
-from shlex import split as split_filepath
+import shlex
 
 COMMANDS = ["echo", "exit", "type", "pwd", "cd"]
 PATH = os.environ.get("PATH", "")
@@ -53,7 +53,7 @@ def handle_echo(command):
 
 def handle_cat(command):
     args = command.split(maxsplit=1)[1]
-    file_paths = args.split_filepath()
+    file_paths = args.shlex.file_path()
 
     for file_path in file_paths:
         try: 
