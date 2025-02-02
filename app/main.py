@@ -6,7 +6,7 @@ from typing import Optional
 COMMANDS = ["echo", "exit", "type"]
 PATH = os.environ.get("PATH", "")
 
-def locate_executable(command) -> Optional(str):
+def locate_executable(command) -> Optional[str]:
 
     for directory in PATH.split(":"):
         file_path = os.PATH.join(directory, command)
