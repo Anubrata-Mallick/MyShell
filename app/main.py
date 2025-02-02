@@ -33,11 +33,10 @@ def main():
         case "exit 0":
             exit(0)
         case _:
-            for path in PATH :
-                if os.path.isfile(command.split(" ")[0]):
-                    os.system(command)
-                    main()   
-            print(f"{command}: command not found")
+            if os.path.isfile(command.split(" ")[0]):
+                os.system(command)
+            else:
+                print(f"{command}: command not found")
 
     main()
 
