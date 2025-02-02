@@ -1,9 +1,20 @@
 import sys
 import os
 import subprocess
+from typing import Optional
 
 COMMANDS = ["echo", "exit", "type"]
-PATH = os.environ.get("PATH")
+PATH = os.environ.get("PATH", "")
+
+def locate_executable(command) -> Optional(str):
+
+    for directory in PATH.split(":"):
+        file_path = os.PATH.join(directory, command)
+
+        if os.path.isfile(file_path) and os.access(file_path, os.X_OK):
+            return file_path
+
+
 
 def main():
         
@@ -34,9 +45,8 @@ def main():
         case "exit 0":
             exit(0)
         case _:
-            for path in PATH.split(":"):
-                if os.path.isfile(command.split(" ")[0]):
-                    os.system(command)
+            if executable := locate_executable(command.split(maxsplit=1)[0]):
+                subprocess.run([executable, command.split(maxsplit=1)[1]])
             else:
                 print(f"{command}: command not found")
 
