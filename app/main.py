@@ -46,6 +46,12 @@ def main():
             exit(0)
         case "pwd":
             sys.stdout.write(f"{os.getcwd()}\n")
+        case command if command.startswith("cd "):
+            #check if the file path exists or not
+            if os.path.exists(command.split(maxsplit=1)[1]):
+                os.chdir(command.split(maxsplit=1)[1]) # change the directory
+            else:
+                sys.stdout.write(f"{command}: No such file or directory \n")
         case _:
             if executable := locate_executable(command.split(maxsplit=1)[0]):
                 subprocess.run([executable, command.split(maxsplit=1)[1]])
