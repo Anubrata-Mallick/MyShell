@@ -9,7 +9,7 @@ PATH = os.environ.get("PATH", "")
 def locate_executable(command) -> Optional[str]:
 
     for directory in PATH.split(":"):
-        file_path = os.PATH.join(directory, command)
+        file_path = os.path.join(directory, command)
 
         if os.path.isfile(file_path) and os.access(file_path, os.X_OK):
             return file_path
