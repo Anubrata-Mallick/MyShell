@@ -47,7 +47,8 @@ def handle_echo(command):
         sys.stdout.write(command.split("'")[1])
         print()
     else:
-        sys.stdout.write(f"{command[ len("echo "): ].strip()}\n")
+        args = command[ len("echo "): ].strip()
+        sys.stdout.write(f"{' '.join(args.split())}\n")
 
 def handle_cat(command):
     args = command.split(maxsplit=1)[1]
