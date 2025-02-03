@@ -43,14 +43,11 @@ def handle_type(command):
         sys.stdout.write(f"{cmd}: not found \n")
 
 def handle_echo(command):
-    if command[len("echo ")] == "'":
-        args = command[len("echo "):].replace("'", "")
-        sys.stdout.write(args)
-        print()
-    else:
-        args = command[ len("echo "): ].strip()
-        sys.stdout.write(f"{' '.join(args.split())}\n")
-
+    # message = command[len("echo "): ]
+    # result = subprocess.run(["echo", message], capture_output = True, text= True)
+    # sys.stdout.write(f"{result}\n")
+    m = shlex.split(command, posix=True)
+    print(' '.join(m[1:]))
 def handle_cat(command):
     args = command.split(maxsplit=1)[1]
     file_paths = shlex.split(args)
