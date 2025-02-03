@@ -43,14 +43,15 @@ def handle_type(command):
         sys.stdout.write(f"{cmd}: not found \n")
 
 def handle_echo(command):
-    # message = command[len("echo "): ]
-    # result = subprocess.run(["echo", message], capture_output = True, text= True)
-    # sys.stdout.write(f"{result}\n")
     m = shlex.split(command, posix=True)
     print(' '.join(m[1:]))
-def handle_cat(command):
-    args = command.split(maxsplit=1)[1]
-    file_paths = shlex.split(args)
+
+def handle_cat(command, modify=False):
+    if modify:
+        file_paths = shlex.split(command, posix=True)[1:]
+    else:
+        args = command.split(maxsplit=1)[1]
+        file_paths = shlex.split(args)
 
     for file_path in file_paths:
         try: 
@@ -61,7 +62,6 @@ def handle_cat(command):
             sys.stdout.write(f"{file_path} Not Found \n")
         except PermissionError:
             sys.stdout.write(f"Permission denied for {file_path}\n")
-
 
 
 def main():
@@ -83,8 +83,10 @@ def main():
             handle_cd(command)
         case command if command.startswith("cat "):
             handle_cat(command)
+        case command if command.startswith("'") or command.startswith('"'):
+            handle_modified_cat(command)
         case _:
-            if executable := locate_executable(command.split(maxsplit=1)[0]):
+            if executable := locate_executable(command.split(maxsplit=1)[0]): # execute external executables
                 subprocess.run([executable, command.split(maxsplit=1)[1]])
             else:
                 print(f"{command}: command not found")
