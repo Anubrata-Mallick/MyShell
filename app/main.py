@@ -84,7 +84,7 @@ def main():
         case command if command.startswith("cat "):
             handle_cat(command)
         case command if command.startswith("'") or command.startswith('"'):
-            handle_modified_cat(command)
+            handle_cat(command, modify=True)
         case _:
             if executable := locate_executable(command.split(maxsplit=1)[0]): # execute external executables
                 subprocess.run([executable, command.split(maxsplit=1)[1]])
