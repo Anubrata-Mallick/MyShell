@@ -52,27 +52,48 @@ def handle_echo(command)->str:
     output = ' '.join(m[1:])
     return f"{output}\n"
 
-def handle_cat(command, modify=False)->str:
-    buffer = []
-    if modify:
-        file_paths = shlex.split(command, posix=True)[1:]
-    else:
-        # args = command.split(maxsplit=1)[1]
-        # file_paths = shlex.split(args)
-        file_paths = shlex.split(command)[1:]
+# def handle_cat(command, modify=False)->str:
+#     buffer = []
+#     if modify:
+#         file_paths = shlex.split(command, posix=True)[1:]
+#     else:
+#         # args = command.split(maxsplit=1)[1]
+#         # file_paths = shlex.split(args)
+#         file_paths = shlex.split(command)[1:]
 
-    for file_path in file_paths:
-        try: 
-            with open(file_path, "r") as file:
-                content = file.read()
-                buffer.append(f"{content}")
-        except FileNotFoundError:
-            return f"cat: {file_path}: No such file or directory\n"
-        except PermissionError:
-            return f"Permission denied for {file_path}\n"
+#     for file_path in file_paths:
+#         try: 
+#             with open(file_path, "r") as file:
+#                 content = file.read()
+#                 buffer.append(f"{content}")
+#         except FileNotFoundError:
+#             return f"cat: {file_path}: No such file or directory\n"
+#         except PermissionError:
+#             return f"Permission denied for {file_path}\n"
+#     output = " ".join(buffer)
+#     return f"{output}\n"
+
+def handle_cat(command, modify=False)->str:
+    cmd_parts = command.split()
+    if modify:
+        cmd_parts.insert(0,"cat")
+
+    buffer = []
+
+    # Loop through the file paths and run the 'cat' command for each
+    for file_path in cmd_parts[1:]:
+        try:
+            # Run the 'cat' command using subprocess
+            result = subprocess.run(["cat", file_path], capture_output=True, text=True, check=True)
+            buffer.append(result.stdout)  # Append content of the file
+
+        except subprocess.CalledProcessError as e:
+            # Handle file not found or permission denied errors
+            if e.returncode == 1:
+                return f"cat: {file_path}: No such file or directory\n"
     output = " ".join(buffer)
     return f"{output}\n"
-
+            
 # def handle_ls(command)-> str:
 #     output = ""
 #     args = shlex.split(command, posix=True)
