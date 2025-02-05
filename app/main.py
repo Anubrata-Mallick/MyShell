@@ -82,7 +82,7 @@ def handle_cat(command, modify=False)->str:
 
     # Loop through the file paths and run the 'cat' command for each
     for file_path in cmd_parts[1:]:
-        try:
+        try: 
             # Run the 'cat' command using subprocess
             result = subprocess.run(["cat", file_path], capture_output=True, text=True, check=True)
             buffer.append(result.stdout)  # Append content of the file
