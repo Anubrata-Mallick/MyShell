@@ -92,7 +92,7 @@ def handle_cat(command, modify=False)->str:
             if e.returncode == 1:
                 return f"cat: {file_path}: No such file or directory\n"
     output = " ".join(buffer)
-    return f"{output}\n"
+    return f"{output}\n" 
             
 # def handle_ls(command)-> str:
 #     output = ""
