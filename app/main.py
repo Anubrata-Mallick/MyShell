@@ -72,22 +72,27 @@ def handle_cat(command, modify=False)->str:
     output = " ".join(buffer)
     return f"{output}\n"
 
-def handle_ls(command)-> str:
-    output = ""
-    args = shlex.split(command, posix=True)
-    if len(args) == 1:
-        paths = '.'
-    else:
-        paths = args[1:]
+# def handle_ls(command)-> str:
+#     output = ""
+#     args = shlex.split(command, posix=True)
+#     if len(args) == 1:
+#         paths = '.'
+#     else:
+#         paths = args[1:]
 
-    item_box = []
-    for path in paths:
-        item = os.listdir(path)
-        item_box.append(item)
+#     item_box = []
+#     for path in paths:
+#         item = os.listdir(path)
+#         item_box.append(item)
     
-    for item in item_box:
-        output = " ".join(item)
-    return f"{output}\n"
+#     for item in item_box:
+#         output = " ".join(item)
+#     return f"{output}\n"
+
+def handle_ls(command)->str:
+    cmd_parts = shlex.split(command)
+    result = subprocess.run(cmd_parts, capture_output=True, text=True, check=True)
+    return result.stdout
 
 def Shell_Engine(command)-> str:
     Engine_Output = ""
