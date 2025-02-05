@@ -50,7 +50,7 @@ def handle_type(command)-> str :
 def handle_echo(command)->str:
     m = shlex.split(command, posix=True)
     output = ' '.join(m[1:])
-    return output
+    return f"{output}\n"
 
 def handle_cat(command, modify=False)->str:
     output = ""
@@ -85,22 +85,58 @@ def handle_ls(command)-> list[list[str]]:
     return item_box
 
 def Shell_Engine(command)-> str:
-    pass
+    Engine_Output = ""
+
+    match command :
+        case command if " 1> " in command or " > " in command:
+            Engine_Output = handle_redirect_output(command)
+            
+        case command if command.startswith("type "):
+            Engine_Output = handle_type(command)
+
+        case command if command.startswith("echo "):
+            Engine_Output = handle_echo(command)
+
+        case "exit 0":
+            exit(0)
+
+        case "pwd":
+            Engine_Output = handle_pwd()
+
+        case command if command.startswith("ls ") or command=="ls":
+            Engine_Output = handle_ls(command)
+
+        case command if command.startswith("cd "):
+            handle_cd(command)
+
+        case command if command.startswith("cat "):
+            Engine_Output = handle_cat(command)
+
+        case command if command.startswith("'") or command.startswith('"'):
+            Engine_Output = handle_cat(command, modify=True)
+
+        case _:
+            if executable := locate_executable(command.split(maxsplit=1)[0]): # execute external executables
+                subprocess.run([executable, command.split(maxsplit=1)[1]])
+            else:
+                Engine_Output = f"{command}: command not found"
+
+    return Engine_Output
 
 def handle_pwd()-> str:
     output = f"{os.getcwd()}\n"
     return output
 
 # echo 'Hello James' 1> /tmp/foo/foo.md
-def handle_redirect_output(command)->str:
-    if "1>" in command:
-        args = command.split(" 1> ")
-    else:
-        args = command.split(" > ")
+# def handle_redirect_output(command)->str:
+#     if "1>" in command:
+#         args = command.split(" 1> ")
+#     else:
+#         args = command.split(" > ")
     
-    source, destination = args[0], args[1]
+#     source, destination = args[0], args[1]
     
-    source_output = None
+#     source_output = None
 
 
 def main():
@@ -109,37 +145,10 @@ def main():
     sys.stdout.flush()
 
     command = input()
-    match command :
-        case command if " 1> " in command or " > " in command:
-            output = handle_redirect_output(command)
-            print_to_shell(output)
-        case command if command.startswith("type "):
-            output = handle_type(command)
-            print_to_shell(output)
-        case command if command.startswith("echo "):
-            output = handle_echo(command)
-            print_to_shell(output)
-        case "exit 0":
-            exit(0)
-        case "pwd":
-            output = handle_pwd()
-            print_to_shell(output)
-        case command if command.startswith("ls ") or command=="ls":
-            output = handle_ls(command)
-            print_to_shell(output)
-        case command if command.startswith("cd "):
-            handle_cd(command)
-        case command if command.startswith("cat "):
-            output = handle_cat(command)
-            print_to_shell(output)
-        case command if command.startswith("'") or command.startswith('"'):
-            output = handle_cat(command, modify=True)
-            print_to_shell(output)
-        case _:
-            if executable := locate_executable(command.split(maxsplit=1)[0]): # execute external executables
-                subprocess.run([executable, command.split(maxsplit=1)[1]])
-            else:
-                print(f"{command}: command not found")
+    output = Shell_Engine(command)
+
+    if output != "" :
+        print_to_shell(output)
 
     main()
 
