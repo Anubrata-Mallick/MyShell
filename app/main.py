@@ -147,12 +147,13 @@ def handle_redirect_output(command)->str:
     source, destination = args[0], args[1]
     
     source_output = Shell_Engine(source)
+
     if source_output.startswith("cat:"):
         return source_output
 
     # then store the output into a file specified
     with open(destination, "w") as file :
-        file.write(source_output)
+        file.write(source_output.rstrip("\n"))
 
     return ""
 
