@@ -7,7 +7,7 @@ import shlex
 COMMANDS = ["echo", "exit", "type", "pwd", "cd"]
 PATH = os.environ.get("PATH", "")
 
-def print_to_shell(output)-> None:
+def print_to_shell(output:str)-> None:
     sys.stdout.write(output)
 
 def locate_executable(command) -> Optional[str]:
@@ -53,7 +53,7 @@ def handle_echo(command)->str:
     return f"{output}\n"
 
 def handle_cat(command, modify=False)->str:
-    output = ""
+    buffer = []
     if modify:
         file_paths = shlex.split(command, posix=True)[1:]
     else:
@@ -64,14 +64,16 @@ def handle_cat(command, modify=False)->str:
         try: 
             with open(file_path, "r") as file:
                 content = file.read()
-                output = f"{content}"
+                buffer.append(f"{content}")
         except FileNotFoundError:
-            output = f"{file_path} Not Found \n"
+            return f"cat: {file_path}: No such file or directory\n"
         except PermissionError:
-            output = f"Permission denied for {file_path}\n"
-    return output
+            return f"Permission denied for {file_path}\n"
+    output = " ".join(buffer)
+    return f"{output}\n"
 
-def handle_ls(command)-> list[list[str]]:
+def handle_ls(command)-> str:
+    output = ""
     args = shlex.split(command, posix=True)
     if len(args) == 1:
         paths = '.'
@@ -82,7 +84,10 @@ def handle_ls(command)-> list[list[str]]:
     for path in paths:
         item = os.listdir(path)
         item_box.append(item)
-    return item_box
+    
+    for item in item_box:
+        output = " ".join(item)
+    return f"{output}\n"
 
 def Shell_Engine(command)-> str:
     Engine_Output = ""
@@ -119,7 +124,7 @@ def Shell_Engine(command)-> str:
             if executable := locate_executable(command.split(maxsplit=1)[0]): # execute external executables
                 subprocess.run([executable, command.split(maxsplit=1)[1]])
             else:
-                Engine_Output = f"{command}: command not found"
+                Engine_Output = f"{command}: command not found\n"
 
     return Engine_Output
 
@@ -128,15 +133,23 @@ def handle_pwd()-> str:
     return output
 
 # echo 'Hello James' 1> /tmp/foo/foo.md
-# def handle_redirect_output(command)->str:
-#     if "1>" in command:
-#         args = command.split(" 1> ")
-#     else:
-#         args = command.split(" > ")
+def handle_redirect_output(command)->str:
+    if "1>" in command:
+        args = command.split(" 1> ")
+    else:
+        args = command.split(" > ")
     
-#     source, destination = args[0], args[1]
+    source, destination = args[0], args[1]
     
-#     source_output = None
+    source_output = Shell_Engine(source)
+    if source_output.startswith("cat:"):
+        return source_output
+
+    # then store the output into a file specified
+    with open(destination, "w") as file :
+        file.write(source_output)
+
+    return ""
 
 
 def main():
