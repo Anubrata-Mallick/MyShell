@@ -57,8 +57,9 @@ def handle_cat(command, modify=False)->str:
     if modify:
         file_paths = shlex.split(command, posix=True)[1:]
     else:
-        args = command.split(maxsplit=1)[1]
-        file_paths = shlex.split(args)
+        # args = command.split(maxsplit=1)[1]
+        # file_paths = shlex.split(args)
+        file_paths = shlex.split(command)[1:]
 
     for file_path in file_paths:
         try: 
